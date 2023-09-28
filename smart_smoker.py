@@ -2,9 +2,9 @@
 
 import pika 
 import sys 
-import csv
-import time 
 import webbrowser
+import csv
+import time
 
 host = "localhost"
 csv_file = "smoker-temps.csv"
@@ -45,12 +45,13 @@ def publish_message_to_queue(host: str, queue_name: str, message: str):
         conn.close()
 
 def get_message_from_csv(input_file):
+    
      input_file = open(csv_file, "r")
      reader = csv.reader(input_file, delimiter=',')
-     
-     next(reader)
     
-for row in reader: 
+     next(reader)
+     
+     for row in reader: 
         input_string_row1 = row[1]
         input_string_row2 = row[2]
         input_string_row3 = row[3]
