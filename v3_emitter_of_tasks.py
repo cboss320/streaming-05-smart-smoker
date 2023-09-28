@@ -29,7 +29,7 @@ def send_message(host: str, queue_name: str, message: str):
 
 if __name__ == "__main__":
     open_rabbitmq_admin_site()
-    with open("tasks.csv", "r") as input_file:
+    with open("smoker-temps.csv", "r") as input_file:
         tasks = (input_file)
 
         reader = csv.reader(tasks, delimiter=",")

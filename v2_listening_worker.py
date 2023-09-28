@@ -1,27 +1,14 @@
-"""
-    This program listens for work messages contiously. 
-    Start multiple versions to add more workers.  
-
-    Author: Denise Case
-    Date: January 15, 2023
-
-"""
 
 import pika
 import sys
 import time
 
-# define a callback function to be called when a message is received
+
 def callback(ch, method, properties, body):
     """ Define behavior on getting a message."""
-    # decode the binary message body to a string
     print(f" [x] Received {body.decode()}")
-    # simulate work by sleeping for the number of dots in the message
     time.sleep(body.count(b"."))
-    # when done with task, tell the user
     print(" [x] Done.")
-    # acknowledge the message was received and processed 
-    # (now it can be deleted from the queue)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
