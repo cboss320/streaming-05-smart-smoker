@@ -1,62 +1,66 @@
 # streaming-05-smart-smoker
 
-# Courtney Pigford 9-21-2023
+# Courtney Pigford 10-1-2023
 
-## Smart Smoker System
+## Before You Begin
 
-Read about the Smart Smoker system here: Smart Smoker
-We read one value every half minute. (sleep_secs = 30)
+- [x] Fork this starter repo into your GitHub.
+- [x] Clone your repo down to your machine.
+- [x] View / Command Palette - then Python: Select Interpreter
+- [x] Select your conda environment. 
+
+## Prerequisites
+
+* RabbitMQ Server running
+* Pika
+* Sys
+* Webbrowser
+* CSV
+* Time
+
+## Smart Smoker
+# Using a Barbeque Smoker
+When running a barbeque smoker, we monitor the temperatures of the smoker and the food to ensure everything turns out tasty. Over long cooks, the following events can happen:
+
+1. The smoker temperature can suddenly decline. 
+2. The food temperature doesn't change. At some point, the food will hit a temperature where moisture evaporates. It will stay close to this temperature for an extended period of time while the moisture evaporates (much like humans sweat to regulate temperature). We say the temperature has stalled.
+ 
+# Sensors
+We have temperature sensors track temperatures and record them to generate a history of both (a) the smoker and (b) the food over time. These readings are an example of time-series data, and are considered streaming data or data in motion.
+
+# Streaming Data
+Our thermometer records three temperatures every thirty seconds (two readings every minute). The three temperatures are:
+1. the temperature of the smoker itself.
+2. the temperature of the first of two foods, Food A.
+3. the temperature for the second of two foods, Food B.
+ 
+# Significant Events
+We want know if:
+1. The smoker temperature decreases by more than 15 degrees F in 2.5 minutes (smoker alert!)
+2. Any food temperature changes less than 1 degree F in 10 minutes (food stall!)
+ 
+# Smart System
+We will use Python to:
+1. Simulate a streaming series of temperature readings from our smart smoker and two foods.
+2. Create a producer to send these temperature readings to RabbitMQ.
+3. Create three consumer processes, each one monitoring one of the temperature streams. 
+4. Perform calculations to determine if a significant event has occurred.
+
+## Assignment
+We want to stream information from a smart smoker. Read one value every half minute. (sleep_secs = 30)
+
 smoker-temps.csv has 4 columns:
 
 [0] Time = Date-time stamp for the sensor reading
 [1] Channel1 = Smoker Temp --> send to message queue "01-smoker"
-[2] Channe2 = Food A Temp --> send to message queue "02-food-A"
-[3] Channe3 = Food B Temp --> send to message queue "02-food-B"
-We want know if:
+[2] Channel2 = Food A Temp --> send to message queue "02-food-A"
+[3] Channel3 = Food B Temp --> send to message queue "03-food-B"
 
-The smoker temperature decreases by more than 15 degrees F in 2.5 minutes (smoker alert!)
-Any food temperature changes less than 1 degree F in 10 minutes (food stall!)
-
-### Time Windows
-
-Smoker time window is 2.5 minutes
-Food time window is 10 minutes
-Deque Max Length
-
-At one reading every 1/2 minute, the smoker deque max length is 5 (2.5 min *1 reading/0.5 min)
-At one reading every 1/2 minute, the food deque max length is 20 (10 min* 1 reading/0.5 min)
-Condition To monitor
-
-If smoker temp decreases by 15 F or more in 2.5 min (or 5 readings)  --> smoker alert!
-If food temp change in temp is 1 F or less in 10 min (or 20 readings)  --> food stall alert!
-Requirements
-
-#### RabbitMQ server running
-
+# Requirements
+RabbitMQ server running
 pika installed in your active environment
-RabbitMQ Admin
+RabbitMQ Admin:
+See http://localhost:15672/Links to an external site.
+## Screenshot
 
-See <http://localhost:15672/> Links to an external site.
-General Design
-
-How many producer processes do you need to read the temperatures: One producer, built last project.
-How many listening queues do we use: three queues, named as listed above.
-How many listening callback functions do we need (Hint: one per queue): Three callback functions are needed.
-
-##### Requirements
-
-In your callback function, make sure you generate alerts - there will be a smoker alert and both Food A and Food B will stall.
-
-Your README.md screenshots must show 4 concurrent processes:
-
-Producer (getting the temperature readings)
-Smoker monitor
-Food A monitor
-Food B monitor
-In addition, you must show at least 3 significant events.
-
-Run each terminal long enough that you can show the significant events in your screenshots:
-
-Visible Smoker Alert with timestamp
-Visible Food A stall with timestamp
-Visible Food B stall with timestamp
+![Alt text](<Screenshot 2023-10-01 at 3.02.39 PM.png>)![Alt text](<Screenshot 2023-10-01 at 3.02.32 PM.png>)
